@@ -1,8 +1,8 @@
-# Jenna AI - Urdu Voice Assistant
+# Jinnah AI - Urdu Voice Assistant
 
 ![Jenna AI Magic Ball Interface](https://raw.githubusercontent.com/Ahmadjamil888/jinnah-AI/refs/heads/main/Screenshot%20(37).png?token=GHSAT0AAAAAADAKD4E5EBUPVC6H3QSZWFFKZ75QCAQ)
 
-Jenna AI is a beautiful voice-activated assistant that communicates exclusively in Urdu. It features a magical interactive interface with voice input/output capabilities powered by the Gemini API.
+Jinnah AI is a beautiful voice-activated assistant that communicates exclusively in Urdu. It features a magical interactive interface with voice input/output capabilities powered by the Gemini API.
 
 ## Features ✨
 
