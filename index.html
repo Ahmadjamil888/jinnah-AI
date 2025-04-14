@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenna AI - Ahmad Jamil</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #6a0dad;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #888;
+            margin-top: 0;
+        }
+
+        .magic-ball {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #9c27b0, #6a0dad);
+            box-shadow: 0 0 30px rgba(106, 13, 173, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .magic-ball:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(106, 13, 173, 0.8);
+        }
+
+        .magic-ball:active {
+            transform: scale(0.95);
+        }
+
+        .magic-ball.active {
+            animation: pulse 1.5s infinite, float 4s ease-in-out infinite;
+        }
+
+        .magic-ball::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+        }
+
+        .magic-ball::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 60%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+        }
+
+        .inner-glow {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .sparkle {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle 2s infinite;
+        }
+
+        .response-container {
+            margin-top: 30px;
+            width: 80%;
+            max-width: 600px;
+            min-height: 100px;
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+            text-align: center;
+            direction: rtl; /* For Urdu text */
+        }
+
+        .response-text {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #9c27b0;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .listening-indicator {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #6a0dad;
+            font-weight: bold;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(106, 13, 173, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(106, 13, 173, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(106, 13, 173, 0); }
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Jenna AI</h1>
+        <p>Created by Ahmad Jamil</p>
+    </div>
+
+    <div class="magic-ball" id="magicBall">
+        <div class="inner-glow"></div>
+        <div class="sparkles" id="sparkles"></div>
+    </div>
+
+    <div class="listening-indicator" id="listeningIndicator">
+        سن رہی ہوں...
+    </div>
+
+    <div class="response-container" id="responseContainer">
+        <div class="response-text" id="responseText"></div>
+    </div>
+
+    <div class="controls">
+        <button id="startListening">بولنا شروع کریں</button>
+        <button id="stopListening">روکیں</button>
+    </div>
+
+    <div class="footer">
+        صرف اردو میں جواب دیتی ہے
+    </div>
+
+    <script>
+        // DOM Elements
+        const magicBall = document.getElementById('magicBall');
+        const sparkles = document.getElementById('sparkles');
+        const startListeningBtn = document.getElementById('startListening');
+        const stopListeningBtn = document.getElementById('stopListening');
+        const listeningIndicator = document.getElementById('listeningIndicator');
+        const responseContainer = document.getElementById('responseContainer');
+        const responseText = document.getElementById('responseText');
+
+        // Gemini API configuration
+        const GEMINI_API_KEY = "AIzaSyC00yb8hoBeHvOVGm3MbJtUkJaPFpLwJBw"; // Replace with your actual API key
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+        // Speech recognition setup
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+        let isListening = false;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'ur-PK'; // Urdu language code
+
+            recognition.onstart = () => {
+                isListening = true;
+                listeningIndicator.style.display = 'block';
+                magicBall.classList.add('active');
+                createSparkles();
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                listeningIndicator.style.display = 'none';
+                magicBall.classList.remove('active');
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Recognition error:', event.error);
+                isListening = false;
+                listeningIndicator.style.display = 'none';
+                magicBall.classList.remove('active');
+                showResponse('معذرت، میں آپ کی آواز نہیں سن سکی۔ براہ کرم دوبارہ کوشش کریں۔');
+            };
+
+            recognition.onresult = async (event) => {
+                const transcript = event.results[0][0].transcript;
+                showResponse(`آپ نے کہا: ${transcript}`);
+                await generateResponse(transcript);
+            };
+        } else {
+            showResponse('معذرت، آپ کا براؤزر سپیچ ریکگنیشن کو سپورٹ نہیں کرتا۔');
+            startListeningBtn.disabled = true;
+        }
+
+        // Event listeners
+        magicBall.addEventListener('click', () => {
+            if (!isListening) {
+                startListening();
+            } else {
+                stopListening();
+            }
+        });
+
+        startListeningBtn.addEventListener('click', startListening);
+        stopListeningBtn.addEventListener('click', stopListening);
+
+        // Functions
+        function startListening() {
+            if (recognition) {
+                try {
+                    recognition.start();
+                } catch (error) {
+                    console.error('Recognition start error:', error);
+                    showResponse('معذرت، میں ابھی آپ کی بات نہیں سن سکتی۔ براہ کرم دوبارہ کوشش کریں۔');
+                }
+            }
+        }
+
+        function stopListening() {
+            if (recognition && isListening) {
+                recognition.stop();
+            }
+        }
+
+        function createSparkles() {
+            // Clear existing sparkles
+            sparkles.innerHTML = '';
+
+            // Create new sparkles
+            for (let i = 0; i < 15; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                
+                // Random position
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 4 + 2;
+                
+                // Random delay
+                const delay = Math.random() * 2;
+                
+                sparkle.style.left = `${x}%`;
+                sparkle.style.top = `${y}%`;
+                sparkle.style.width = `${size}px`;
+                sparkle.style.height = `${size}px`;
+                sparkle.style.animationDelay = `${delay}s`;
+                
+                sparkles.appendChild(sparkle);
+            }
+        }
+
+        function showResponse(text) {
+            responseText.textContent = text;
+            responseContainer.style.display = 'block';
+
+            // Speak the response
+            speak(text.replace('آپ نے کہا: ', ''));
+        }
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ur-PK'; // Urdu language code
+                utterance.rate = 0.9;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        async function generateResponse(prompt) {
+            try {
+                const response = await fetch(GEMINI_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `Respond in Urdu only. Keep the response concise and conversational. ${prompt}`
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    const geminiResponse = data.candidates[0].content.parts[0].text;
+                    showResponse(geminiResponse);
+                } else {
+                    showResponse('معذرت، میں اس سوال کا جواب نہیں دے سکتی۔');
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                showResponse('معذرت، میں اس وقت جواب نہیں دے سکتی۔ براہ کرم بعد میں کوشش کریں۔');
+            }
+        }
+    </script>
+</body>
+</html>
